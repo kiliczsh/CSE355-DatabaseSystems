@@ -1,11 +1,7 @@
 -------> FIRST VIEW <------- 
+-- View Table 1: Statistics for each category number of users who are over 18 and willing to watch.
 
--- View for
--- for all categories
--- for average age 
--- for will watch list follower
-
-CREATE VIEW viewTable2 AS
+CREATE VIEW viewTable1 AS
 SELECT m.Category_ID "Category ID", COUNT( ww.User_ID) "Willing to Watch" , AVG(u.User_Age) "Average Age"
 FROM MOVIE m, WILL_WATCH ww, [USER] u
 WHERE ww.Movie_ID= m.Movie_ID AND ww.User_ID= u.User_ID AND u.User_Age > 18 
@@ -17,12 +13,9 @@ GROUP BY m.Category_ID
 
 -------> SECOND VIEW <------- 
 
---View for movies
--- same category ID=11
--- more than 2 awards 
--- more than 2 followers
+-- View Table 2: Movies in a category(11) that has more than two followers and earned two awards.
 
-CREATE VIEW viewTable1 AS
+CREATE VIEW viewTable2 AS
 SELECT  m.Movie_Name "Movie Name",m.Category_ID Category ,COUNT(DISTINCT fm.Award_ID) Awards, COUNT( w.User_ID) Follower
 FROM MOVIE m, FILM_AWARD fm , WATCHED w, [USER] u
 WHERE fm.Movie_ID = m.Movie_ID AND w.Movie_ID= m.Movie_ID AND w.User_ID= u.User_ID AND m.Category_ID=11
@@ -34,6 +27,7 @@ HAVING COUNT(DISTINCT fm.Award_ID) >= 2 AND COUNT( w.User_ID) >= 2
 
 
 -------> THIRD VIEW <------- 
+-- 	View Table 3: Other movies seen by a user that have been watched and have same director in cast. 
 CREATE  VIEW viewTable3 as
 select [USER].User_Name,MOVIE.Movie_Name  from WATCHED
 join
@@ -57,8 +51,7 @@ select * from MOVIE
 
 
 -------> FOURTH VIEW <------- 
--- movies that user watched with less than 2 awards
--- users who watched movies with more than 2 awards 
+-- View Table 4: Movies a user watched with less than 2 awards except who watched movies with more than 2 awards.
 (select WATCHED.User_ID,WATCHED.Movie_ID from WATCHED
 join
 (select DISTINCT(WATCHED.USER_ID) from WATCHED
